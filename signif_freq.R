@@ -19,19 +19,20 @@ data <- read_table("work/Kursach/2ndtry/19992022rawdata",
 coefficients <- data[, -1]  
 num_columns <- ncol(coefficients)
 #примерные положения значимых частот
-approx_frequencies <- c(364, 732, 1097.1944 ,1461, 1825)
-frequency_tolerance <- 10
+approx_frequencies <- c(364.26854, 728.5371, 1145.4709 ,1461.463, 1825.731)
+frequency_tolerance <- 60
 min_peak_height <- 0
 
 results <- data.frame(Number = integer(), 
                       Significant_Frequency = numeric(), 
-                      Period_Years = numeric())
+                      Period_Years = numeric(),
+                      Period_days = numeric())
 
 for (i in 1:num_columns) {
   print(i)
   
-  series <- ts(coefficients[[i]], start = c(1999, 1), frequency = 12*365)
-  spm <- spec.ar(series, order = 250, plot = TRUE, method = "burg")
+  series <- ts(coefficients[[i]], start = c(1999, 1), frequency = 365 * 12)
+  spm <- spec.ar(series, order = 1000, plot = TRUE, method = "burg")
   
   spm_data <- data.frame(Frequency = spm$freq, Spec = spm$spec)
   
@@ -64,7 +65,8 @@ for (i in 1:num_columns) {
   for (j in seq_along(significant_frequencies)) {
     results <- rbind(results, data.frame(Number = i, 
                                          Significant_Frequency = significant_frequencies[j], 
-                                         Period_Years = significant_periods_days[j]))
+                                         Period_Years = significant_periods_days[j],
+                                         Period_days = significant_periods_days[j] * 365))
   }
   
   pdf(paste("/home/vladislav/work/Kursach/2ndtry/graph_sign_freq/plot", i, ".pdf", sep=""), width=10, height=6)

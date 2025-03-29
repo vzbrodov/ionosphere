@@ -1,4 +1,3 @@
-
 library(forecast)
 library(readr)
 
@@ -18,8 +17,10 @@ data <- read_table("work/Kursach/2ndtry/19992022rawdata",
 
 coefficients <- data[, -1]  
 num_columns <- ncol(coefficients)
-#примерные положения значимых частот
-approx_frequencies <- c(364.26854, 728.5371, 1145.4709 ,1461.463, 1825.731)
+
+approx_frequencies <- c(364.26854, 728.5371, 1145.4709 ,1461.463, 1825.731) #примерные положения значимых частот. были найдены уже после первых запусков программы.
+                                                                            #Позволяют легче найти значимые частоты.
+                                      
 frequency_tolerance <- 60
 min_peak_height <- 0
 
@@ -92,4 +93,3 @@ for (i in 1:num_columns) {
    print(paste("Significant frequencies for series", i, ":", paste(significant_frequencies, collapse=", ")))
 }
 write.csv(results, file = "significant_frequencies.csv", row.names = FALSE)
-print("Results saved to significant_frequencies.csv")
